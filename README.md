@@ -10,10 +10,4 @@
 ```bash
 # Instalación de librerías
 uv sync
-
-# Renderizar la presentación
-uv run python -m manim_slides render main.py presentation
-
-# Presentar
-uv run python -m manim_slides present presentation
 ```
