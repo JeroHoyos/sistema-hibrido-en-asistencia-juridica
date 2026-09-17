@@ -2,9 +2,8 @@
 
 ## Requisitos
 
-- Python ≥ 3.13 (ver [.python-version](.python-version))
-- [uv](https://docs.astral.sh/uv/) para gestionar el entorno y las dependencias
-
+- Python ≥ 3.13 
+- [uv](https://docs.astral.sh/uv/) 
 ## Uso
 
 ```bash
