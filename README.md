@@ -30,20 +30,7 @@ sistema-hibrido-en-asistencia-juridica/
 
 ---
 
-## 👥 Repartición de Módulos y Roles
-
-| Integrante | Módulo | Responsabilidad |
-| :--- | :--- | :--- |
-| **Integrante 1** | Lógica Difusa | Funciones de pertenencia, modificadores y defuzzificación (`src/difuso/`). |
-| **Integrante 2** | Ontología | Construcción en Turtle, OWL-RL y casos de inferencia (`src/ontologia/`, `data/`). |
-| **Integrante 3** | Sistema Experto | Hechos, reglas jurídicas, salience y control de bucles (`src/experto/`). |
-| **Integrante 4** | Integrador | Traductor dinámico, demo orquestada y consolidación (`src/integrador/`). |
-
-Consulta los detalles de los contratos de entrada y salida en [`docs/arquitectura_y_contratos.md`](docs/arquitectura_y_contratos.md).
-
----
-
-## 🚀 Requisitos y Configuración
+## Requisitos y Configuración
 
 - **Python:** Python ≥ 3.10 (ver análisis de compatibilidad de `experta` en [`docs/compatibilidad_python_experta.md`](docs/compatibilidad_python_experta.md)).
 - **Gestor de dependencias:** [uv](https://docs.astral.sh/uv/) o entorno virtual estándar `venv`.
@@ -53,11 +40,3 @@ Consulta los detalles de los contratos de entrada y salida en [`docs/arquitectur
 uv sync
 ```
 
----
-
-## 🌿 Flujo de Trabajo en Git
-
-1. Cada integrante trabaja sobre su rama personal: `feature/<nombre-integrante>`.
-2. Realizar `push` a su propia rama remota.
-3. Abrir Pull Request (PR) hacia `main` describiendo los cambios.
-4. El propietario del repositorio revisa y realiza el merge a `main`.
