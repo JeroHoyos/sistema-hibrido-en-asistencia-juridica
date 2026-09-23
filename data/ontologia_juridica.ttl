@@ -1,0 +1,327 @@
+# Prefijos y namespaces definidos
+@prefix : <http://example.org/juridico#> .
+@prefix ex: <http://example.org/juridico#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+# -----------------------------------------------------------------------------
+# Clases Principales y Jerarquias (12 clases, 7 relaciones subClassOf)
+# -----------------------------------------------------------------------------
+
+# Clase base de casos juridicos para unificar el dominio de atencion
+ex:CasoJuridico a rdfs:Class ;
+    rdfs:label "Caso Juridico general" .
+
+# Subclase para controversias de agresion o vulneracion en el entorno familiar
+ex:CasoViolencia a rdfs:Class ;
+    rdfs:subClassOf ex:CasoJuridico ;
+    rdfs:label "Caso de Violencia Intrafamiliar" .
+
+# Subclase para disputas de arrendamiento, posesion y habitabilidad
+ex:CasoVivienda a rdfs:Class ;
+    rdfs:subClassOf ex:CasoJuridico ;
+    rdfs:label "Caso de Vivienda y Arrendamiento" .
+
+# Subclase para conflictos de limites, uso del suelo y despojo
+ex:CasoTerritorial a rdfs:Class ;
+    rdfs:subClassOf ex:CasoJuridico ;
+    rdfs:label "Caso de Conflicto Territorial" .
+
+# Clase base para personas naturales vinculadas a un expediente
+ex:Persona a rdfs:Class ;
+    rdfs:label "Persona natural interviniente" .
+
+# Subclase para la parte que sufre la afectacion o agravio
+ex:Victima a rdfs:Class ;
+    rdfs:subClassOf ex:Persona ;
+    rdfs:label "Persona victima o afectada" .
+
+# Subclase para la persona contra quien se dirige la accion o medida
+ex:Agresor a rdfs:Class ;
+    rdfs:subClassOf ex:Persona ;
+    rdfs:label "Persona denunciada o agresora" .
+
+# Clase base para entidades institucionales y operadores de justicia
+ex:Autoridad a rdfs:Class ;
+    rdfs:label "Autoridad publica o judicial" .
+
+# Subclase para despachos de la rama judicial ordinaria o penal
+ex:AutoridadJudicial a rdfs:Class ;
+    rdfs:subClassOf ex:Autoridad ;
+    rdfs:label "Autoridad del orden judicial" .
+
+# Subclase para entes administrativos, policivos o del ministerio publico
+ex:AutoridadAdministrativa a rdfs:Class ;
+    rdfs:subClassOf ex:Autoridad ;
+    rdfs:label "Autoridad administrativa o policiva" .
+
+# Clase para ordenes de proteccion y amparos policivos inmediatos
+ex:MedidaProteccion a rdfs:Class ;
+    rdfs:label "Medida cautelar o de proteccion" .
+
+# Clase para el fundamento normativo aplicable al caso
+ex:NormaLegal a rdfs:Class ;
+    rdfs:label "Norma o estatuto legal de respaldo" .
+
+# -----------------------------------------------------------------------------
+# Propiedades RDF con Dominio, Rango y Jerarquia (11 propiedades)
+# -----------------------------------------------------------------------------
+
+# Propiedad general para vincular un caso con las personas intervinientes
+ex:involucraPersona a rdf:Property ;
+    rdfs:domain ex:CasoJuridico ;
+    rdfs:range ex:Persona ;
+    rdfs:label "Involucra a una persona en el caso" .
+
+# Subpropiedad especifica para registrar a la victima (demuestra subPropertyOf)
+ex:tieneVictima a rdf:Property ;
+    rdfs:subPropertyOf ex:involucraPersona ;
+    rdfs:domain ex:CasoJuridico ;
+    rdfs:range ex:Victima ;
+    rdfs:label "Identifica a la victima del caso" .
+
+# Subpropiedad especifica para registrar al agresor denunciado
+ex:tieneAgresor a rdf:Property ;
+    rdfs:subPropertyOf ex:involucraPersona ;
+    rdfs:domain ex:CasoJuridico ;
+    rdfs:range ex:Agresor ;
+    rdfs:label "Identifica al agresor o demandado" .
+
+# Propiedad para canalizar el expediente hacia la entidad competente
+ex:remitidoA a rdf:Property ;
+    rdfs:domain ex:CasoJuridico ;
+    rdfs:range ex:Autoridad ;
+    rdfs:label "Entidad a la que se remite la consulta" .
+
+# Propiedad para asociar la ley o codigo que sustenta la orientacion
+ex:fundamentadoEn a rdf:Property ;
+    rdfs:domain ex:CasoJuridico ;
+    rdfs:range ex:NormaLegal ;
+    rdfs:label "Norma que respalda la actuacion" .
+
+# Propiedad para prescribir la accion protectora requerida
+ex:requiereMedida a rdf:Property ;
+    rdfs:domain ex:CasoJuridico ;
+    rdfs:range ex:MedidaProteccion ;
+    rdfs:label "Medida cautelar requerida por los hechos" .
+
+# Subpropiedad de vocabulario estandar foaf:name para el nombre de la persona
+ex:nombrePersona a rdf:Property ;
+    rdfs:subPropertyOf foaf:name ;
+    rdfs:domain ex:Persona ;
+    rdfs:range xsd:string ;
+    rdfs:label "Nombre completo del interviniente" .
+
+# Propiedad para registrar la edad y verificar si es sujeto de especial proteccion
+ex:edadPersona a rdf:Property ;
+    rdfs:domain ex:Persona ;
+    rdfs:range xsd:integer ;
+    rdfs:label "Edad cronologica de la persona" .
+
+# Subpropiedad de vocabulario estandar dc:description para relatar los hechos
+ex:descripcionHecho a rdf:Property ;
+    rdfs:subPropertyOf dc:description ;
+    rdfs:domain ex:CasoJuridico ;
+    rdfs:range xsd:string ;
+    rdfs:label "Relato fáctico del caso consultado" .
+
+# Propiedad para la fecha formal de atencion
+ex:fechaRadicacion a rdf:Property ;
+    rdfs:domain ex:CasoJuridico ;
+    rdfs:range xsd:date ;
+    rdfs:label "Fecha de presentacion de la consulta" .
+
+# Propiedad para tasar la cuantia economica en controversias de vivienda
+ex:montoCuantia a rdf:Property ;
+    rdfs:domain ex:CasoVivienda ;
+    rdfs:range xsd:decimal ;
+    rdfs:label "Monto estimado de la controversia economica" .
+
+# -----------------------------------------------------------------------------
+# Instancias de Normas y Autoridades (Mapeadas a entidades reales)
+# -----------------------------------------------------------------------------
+
+ex:ley_1257_2008 a ex:NormaLegal ;
+    rdfs:label "Ley 1257 de 2008 de no violencia contra la mujer" .
+
+ex:ley_820_2003 a ex:NormaLegal ;
+    rdfs:label "Ley 820 de 2003 de arrendamiento de vivienda" .
+
+ex:ley_1448_2011 a ex:NormaLegal ;
+    rdfs:label "Ley 1448 de 2011 de victimas y restitucion de tierras" .
+
+ex:ley_1098_2006 a ex:NormaLegal ;
+    rdfs:label "Codigo de la Infancia y la Adolescencia" .
+
+ex:fiscalia_general a ex:AutoridadJudicial ;
+    rdfs:label "Fiscalia General de la Nacion" .
+
+ex:juzgado_civil a ex:AutoridadJudicial ;
+    rdfs:label "Juzgado Civil Municipal" .
+
+ex:juzgado_penal a ex:AutoridadJudicial ;
+    rdfs:label "Juzgado Penal con Funcion de Garantias" .
+
+ex:tribunal_superior a ex:AutoridadJudicial ;
+    rdfs:label "Tribunal Superior de Distrito Judicial" .
+
+ex:comisaria_familia a ex:AutoridadAdministrativa ;
+    rdfs:label "Comisaria de Familia" .
+
+ex:icbf_defensoria a ex:AutoridadAdministrativa ;
+    rdfs:label "Defensoria de Familia ICBF" .
+
+ex:personeria_municipal a ex:AutoridadAdministrativa ;
+    rdfs:label "Personeria Municipal" .
+
+ex:inspeccion_policia a ex:AutoridadAdministrativa ;
+    rdfs:label "Inspeccion de Policia Urbana" .
+
+# -----------------------------------------------------------------------------
+# Instancias de Medidas de Proteccion
+# -----------------------------------------------------------------------------
+
+ex:orden_desalojo_agresor a ex:MedidaProteccion ;
+    rdfs:label "Orden de desalojo inmediato del agresor" .
+
+ex:medida_alejamiento a ex:MedidaProteccion ;
+    rdfs:label "Prohibicion de acercamiento a la victima" .
+
+ex:albergue_temporal a ex:MedidaProteccion ;
+    rdfs:label "Traslado a casa de refugio o albergue" .
+
+ex:amparo_posesorio a ex:MedidaProteccion ;
+    rdfs:label "Medida policiva de amparo a la posesion" .
+
+# -----------------------------------------------------------------------------
+# Instancias de Personas (Victimas y Agresores con rdfs:label)
+# -----------------------------------------------------------------------------
+
+ex:victima_01 a ex:Victima ;
+    ex:nombrePersona "Ana Perez" ;
+    ex:edadPersona 34 ;
+    rdfs:label "Ana Perez victima de violencia verbal" .
+
+ex:victima_02 a ex:Victima ;
+    ex:nombrePersona "Maria Gomez" ;
+    ex:edadPersona 28 ;
+    rdfs:label "Maria Gomez victima de agresion fisica" .
+
+ex:victima_03 a ex:Victima ;
+    ex:nombrePersona "Sofia Castro" ;
+    ex:edadPersona 8 ;
+    rdfs:label "Sofia Castro menor en situacion de riesgo" .
+
+ex:victima_04 a ex:Victima ;
+    ex:nombrePersona "Carmen Ruiz" ;
+    ex:edadPersona 72 ;
+    rdfs:label "Carmen Ruiz adulta mayor afectada" .
+
+ex:agresor_01 a ex:Agresor ;
+    ex:nombrePersona "Carlos Mora" ;
+    ex:edadPersona 38 ;
+    rdfs:label "Carlos Mora denunciado por violencia" .
+
+ex:agresor_02 a ex:Agresor ;
+    ex:nombrePersona "Pedro Diaz" ;
+    ex:edadPersona 45 ;
+    rdfs:label "Pedro Diaz arrendador en mora" .
+
+ex:agresor_03 a ex:Agresor ;
+    ex:nombrePersona "Juan Rios" ;
+    ex:edadPersona 50 ;
+    rdfs:label "Juan Rios ocupante irregular" .
+
+ex:agresor_04 a ex:Agresor ;
+    ex:nombrePersona "Luis Ortiz" ;
+    ex:edadPersona 41 ;
+    rdfs:label "Luis Ortiz presunto agresor" .
+
+# -----------------------------------------------------------------------------
+# Instancias de Casos Juridicos (Casos 1, 2 y 3 para deducciones exactas)
+# -----------------------------------------------------------------------------
+
+# Caso 1: Diseñado para demostrar deduccion por subClassOf (Caso 1 de la guia)
+ex:caso_violencia_01 a ex:CasoViolencia ;
+    ex:tieneVictima ex:victima_01 ;
+    ex:tieneAgresor ex:agresor_01 ;
+    ex:remitidoA ex:comisaria_familia ;
+    ex:fundamentadoEn ex:ley_1257_2008 ;
+    ex:requiereMedida ex:medida_alejamiento ;
+    ex:descripcionHecho "Amenazas verbales continuas dentro del domicilio" ;
+    rdfs:label "Expediente de violencia intrafamiliar 01" .
+
+ex:caso_violencia_02 a ex:CasoViolencia ;
+    ex:tieneVictima ex:victima_02 ;
+    ex:tieneAgresor ex:agresor_04 ;
+    ex:remitidoA ex:fiscalia_general ;
+    ex:fundamentadoEn ex:ley_1257_2008 ;
+    ex:requiereMedida ex:orden_desalojo_agresor ;
+    rdfs:label "Expediente de violencia fisica urgente 02" .
+
+ex:caso_violencia_03 a ex:CasoViolencia ;
+    ex:tieneVictima ex:victima_03 ;
+    ex:remitidoA ex:icbf_defensoria ;
+    ex:fundamentadoEn ex:ley_1098_2006 ;
+    rdfs:label "Expediente de custodia y proteccion de menor 03" .
+
+ex:caso_violencia_04 a ex:CasoViolencia ;
+    ex:tieneVictima ex:victima_04 ;
+    ex:remitidoA ex:comisaria_familia ;
+    rdfs:label "Expediente de atencion a adulta mayor 04" .
+
+ex:caso_vivienda_01 a ex:CasoVivienda ;
+    ex:remitidoA ex:juzgado_civil ;
+    ex:fundamentadoEn ex:ley_820_2003 ;
+    ex:montoCuantia 4500000.0 ;
+    ex:descripcionHecho "Mora reiterada en canon de arrendamiento y solicitud de restitucion" ;
+    rdfs:label "Expediente de restitucion de inmueble arrendado 01" .
+
+ex:caso_vivienda_02 a ex:CasoVivienda ;
+    ex:remitidoA ex:personeria_municipal ;
+    ex:descripcionHecho "Falta de habitabilidad y corte de servicios publicos esenciales" ;
+    rdfs:label "Expediente de habitabilidad y servicios publicos 02" .
+
+ex:caso_vivienda_03 a ex:CasoVivienda ;
+    ex:remitidoA ex:juzgado_civil ;
+    ex:descripcionHecho "Controversia sobre escritura publica y sucesion intestada" ;
+    rdfs:label "Expediente de sucesion y titulacion 03" .
+
+ex:caso_vivienda_04 a ex:CasoVivienda ;
+    ex:remitidoA ex:inspeccion_policia ;
+    ex:descripcionHecho "Defectos estructurales con riesgo inminente de ruina" ;
+    rdfs:label "Expediente de riesgo de colapso estructural 04" .
+
+ex:caso_territorial_01 a ex:CasoTerritorial ;
+    ex:remitidoA ex:inspeccion_policia ;
+    ex:requiereMedida ex:amparo_posesorio ;
+    ex:descripcionHecho "Alteracion de linderos y perturbacion a la posesion agraria" ;
+    rdfs:label "Expediente de disputa de linderos 01" .
+
+ex:caso_territorial_02 a ex:CasoTerritorial ;
+    ex:remitidoA ex:personeria_municipal ;
+    ex:descripcionHecho "Uso no conforme de suelo y construccion en espacio comunal" ;
+    rdfs:label "Expediente de infraccion urbanistica 02" .
+
+ex:caso_territorial_03 a ex:CasoTerritorial ;
+    ex:remitidoA ex:juzgado_penal ;
+    ex:fundamentadoEn ex:ley_1448_2011 ;
+    ex:descripcionHecho "Despojo forzado de tierras en predio rural" ;
+    rdfs:label "Expediente de despojo y restitucion de tierras 03" .
+
+ex:caso_territorial_04 a ex:CasoTerritorial ;
+    ex:remitidoA ex:personeria_municipal ;
+    ex:descripcionHecho "Afectacion por vertimiento de aguas sobre predios colindantes" ;
+    rdfs:label "Expediente de dano ambiental colectivo 04" .
+
+# -----------------------------------------------------------------------------
+# Casos Especiales para Evidenciar las Inferencias de Dominio y Subpropiedad
+# -----------------------------------------------------------------------------
+
+# Individuo sin declaracion explicita de rdf:type para evidenciar Caso 2 (dominio y rango)
+ex:caso_prueba_inferencia ex:tieneVictima ex:sujeto_inferido_victima.
+
+# Fin de la ontologia
